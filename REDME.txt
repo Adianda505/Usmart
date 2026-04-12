@@ -1,0 +1,10 @@
+Cara Configurasi File :
+1. composer install
+2. cp .env example.env
+3. php artisan key:generate
+//di cmd
+3. npm install
+4. npm run dev
+
+php artisan serve
+
