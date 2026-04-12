@@ -11,7 +11,7 @@
 
         <div class="p-6 space-y-6">
 
-            {{-- Top Bar (dibungkus card biar rapi) --}}
+            {{-- Top Bar --}}
             <div class="bg-white p-5 rounded-2xl shadow-sm border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
                 {{-- Search --}}

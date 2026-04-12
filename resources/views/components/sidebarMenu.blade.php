@@ -1,6 +1,6 @@
 <div class="bg-green-900 w-full shadow-lg">
 
-    <!-- HEADER / BRAND -->
+    <!-- HEADER -->
     <div class="flex items-center justify-between px-6 py-4 text-white">
         
         <div class="flex items-center gap-2">
