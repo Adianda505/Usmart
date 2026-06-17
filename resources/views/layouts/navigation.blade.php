@@ -1,116 +1,165 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
 
-    <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="flex justify-between h-16">
 
-            <div class="flex">
+            <!-- Left Side -->
+            <div class="flex items-center">
 
-                <!-- Logo -->
+                <!-- Logo / Brand -->
                 <div class="shrink-0 flex items-center">
-                    <a href="#">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="#" class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-lg shadow">
+                            U
+                        </div>
+
+                        <div class="leading-tight">
+                            <h1 class="text-xl font-bold text-slate-800 tracking-tight">
+                                UsMart
+                            </h1>
+                            <p class="text-xs text-slate-500 -mt-1">
+                                Store Management
+                            </p>
+                        </div>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden sm:flex sm:items-center sm:ms-10 gap-2">
 
                     {{-- OWNER --}}
                     @if(Auth::user()->role == 'owner')
 
-                        <x-nav-link :href="route('owner.dashboard')" :active="request()->routeIs('owner.dashboard')">
+                        <a href="{{ route('owner.dashboard') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('owner.dashboard') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Dashboard
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('owner.products.product')" :active="request()->routeIs('owner.products.product')">
+                        <a href="{{ route('owner.products.product') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('owner.products.product') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Products
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('owner.stock.stocklist')" :active="request()->routeIs('owner.stock.stocklist')">
+                        <a href="{{ route('owner.stock.stocklist') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('owner.stock.stocklist') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Stock
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('branches.index')" :active="request()->routeIs('branches.*')">
+                        <a href="{{ route('branches.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('branches.*') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Cabang
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('kasir.index')" :active="request()->routeIs('kasir.index') || request()->routeIs('kasir.create') || request()->routeIs('kasir.edit')">
+                        <a href="{{ route('kasir.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('kasir.index') || request()->routeIs('kasir.create') || request()->routeIs('kasir.edit') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Kasir
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('manajer.index')" :active="request()->routeIs('manajer.index') || request()->routeIs('manajer.create') || request()->routeIs('manajer.edit')">
+                        <a href="{{ route('manajer.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('manajer.index') || request()->routeIs('manajer.create') || request()->routeIs('manajer.edit') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Manajer
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('supervisor.index')" :active="request()->routeIs('supervisor.index') || request()->routeIs('supervisor.create') || request()->routeIs('supervisor.edit')">
+                        <a href="{{ route('supervisor.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('supervisor.index') || request()->routeIs('supervisor.create') || request()->routeIs('supervisor.edit') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Supervisor
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('owner.transactions.index')" :active="request()->routeIs('owner.transactions.index')">
-                            Transaksi Cabang
-                        </x-nav-link>
+                        <a href="{{ route('owner.transactions.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('owner.transactions.index') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            Transaksi
+                        </a>
 
 
                     {{-- MANAJER --}}
                     @elseif(Auth::user()->role == 'manajer')
 
-                        <x-nav-link :href="route('manajer.dashboard')" :active="request()->routeIs('manajer.dashboard')">
+                        <a href="{{ route('manajer.dashboard') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('manajer.dashboard') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Dashboard
-                        </x-nav-link>
+                        </a>
 
-                       <x-nav-link :href="route('manajer.produk-cabang.index')" :active="request()->routeIs('manajer.produk-cabang.index')">
-                             Produk Cabang
-                        </x-nav-link>
+                        <a href="{{ route('manajer.produk-cabang.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('manajer.produk-cabang.index') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
+                            Produk Cabang
+                        </a>
 
-                        <x-nav-link :href="route('manajer.transaksi.index')" :active="request()->routeIs('manajer.transaksi.index')">
+                        <a href="{{ route('manajer.transaksi.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('manajer.transaksi.index') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Transaksi
-                        </x-nav-link>
+                        </a>
 
 
                     {{-- KASIR --}}
                     @elseif(Auth::user()->role == 'kasir')
 
-                        <x-nav-link :href="route('kasir.dashboard')" :active="request()->routeIs('kasir.dashboard')">
+                        <a href="{{ route('kasir.dashboard') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('kasir.dashboard') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Dashboard
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('kasir.transaksi.index')" :active="request()->routeIs('kasir.transaksi.index')">
+                        <a href="{{ route('kasir.transaksi.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('kasir.transaksi.index') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Transaksi
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('kasir.transaksi.create')" :active="request()->routeIs('kasir.transaksi.create')">
+                        <a href="{{ route('kasir.transaksi.create') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('kasir.transaksi.create') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Buat Transaksi
-                        </x-nav-link>
+                        </a>
 
 
                     {{-- GUDANG --}}
                     @elseif(Auth::user()->role == 'gudang')
 
-                        <x-nav-link :href="route('gudang.dashboard')" :active="request()->routeIs('gudang.dashboard')">
+                        <a href="{{ route('gudang.dashboard') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('gudang.dashboard') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Dashboard
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        <a href="{{ route('products.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('products.*') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Produk
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('stock.index')" :active="request()->routeIs('stock.*')">
+                        <a href="{{ route('stock.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('stock.*') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Stock Movement
-                        </x-nav-link>
+                        </a>
 
 
                     {{-- SUPERVISOR --}}
                     @elseif(Auth::user()->role == 'supervisor')
 
-                        <x-nav-link :href="route('supervisor.dashboard')" :active="request()->routeIs('supervisor.dashboard')">
+                        <a href="{{ route('supervisor.dashboard') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('supervisor.dashboard') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Dashboard
-                        </x-nav-link>
+                        </a>
 
-                        <x-nav-link :href="route('supervisor.transaksi.index')" :active="request()->routeIs('supervisor.transaksi.index')">
+                        <a href="{{ route('supervisor.transaksi.index') }}"
+                           class="px-4 py-2 rounded-xl text-sm font-medium transition
+                           {{ request()->routeIs('supervisor.transaksi.index') ? 'bg-slate-900 text-white shadow' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900' }}">
                             Transaksi
-                        </x-nav-link>
+                        </a>
 
                     @endif
 
@@ -118,42 +167,46 @@
 
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <!-- Right Side / User Dropdown -->
+            <div class="hidden sm:flex sm:items-center">
 
-                <x-dropdown align="right" width="48">
+                <x-dropdown align="right" width="56">
 
                     <x-slot name="trigger">
+                        <button class="flex items-center gap-3 px-3 py-2 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition shadow-sm">
 
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-
-                            <div>
-                                {{ Auth::user()->name }}
-
-                                <span class="text-xs text-gray-400">
-                                    ({{ Auth::user()->role }})
-                                </span>
+                            <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                             </div>
 
-                            <div class="ms-1">
+                            <div class="text-left leading-tight">
+                                <div class="text-sm font-semibold text-slate-800">
+                                    {{ Auth::user()->name }}
+                                </div>
 
-                                <svg class="fill-current h-4 w-4"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
-
-                                </svg>
-
+                                <div class="text-xs text-slate-500 capitalize">
+                                    {{ Auth::user()->role }}
+                                </div>
                             </div>
+
+                            <svg class="w-4 h-4 text-slate-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
 
                         </button>
-
                     </x-slot>
 
                     <x-slot name="content">
+
+                        <div class="px-4 py-3 border-b border-slate-100">
+                            <div class="font-semibold text-sm text-slate-800">
+                                {{ Auth::user()->name }}
+                            </div>
+
+                            <div class="text-xs text-slate-500">
+                                {{ Auth::user()->email }}
+                            </div>
+                        </div>
 
                         <x-dropdown-link :href="route('profile.edit')">
                             Profile
@@ -162,12 +215,11 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                this.closest('form').submit();">
-
+                            <x-dropdown-link
+                                :href="route('logout')"
+                                onclick="event.preventDefault(); this.closest('form').submit();"
+                            >
                                 Log Out
-
                             </x-dropdown-link>
                         </form>
 
@@ -178,32 +230,33 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="flex items-center sm:hidden">
 
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button
+                    @click="open = ! open"
+                    class="inline-flex items-center justify-center p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition"
+                >
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
 
-                    <svg class="h-6 w-6"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 24 24">
-
-                        <path :class="{'hidden': open, 'inline-flex': ! open }"
+                        <path
+                            :class="{'hidden': open, 'inline-flex': ! open }"
                             class="inline-flex"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
 
-                        <path :class="{'hidden': ! open, 'inline-flex': open }"
+                        <path
+                            :class="{'hidden': ! open, 'inline-flex': open }"
                             class="hidden"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                            d="M6 18L18 6M6 6l12 12"
+                        />
 
                     </svg>
-
                 </button>
 
             </div>
@@ -213,148 +266,192 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div
+        :class="{'block': open, 'hidden': ! open}"
+        class="hidden sm:hidden bg-white border-t border-slate-200"
+    >
 
-        <div class="pt-2 pb-3 space-y-1">
+        <div class="px-4 pt-4 pb-3 space-y-2">
 
             {{-- OWNER RESPONSIVE --}}
             @if(Auth::user()->role == 'owner')
 
-                <x-responsive-nav-link :href="route('owner.dashboard')" :active="request()->routeIs('owner.dashboard')">
+                <a href="{{ route('owner.dashboard') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('owner.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Dashboard
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('owner.products.product')" :active="request()->routeIs('owner.products.product')">
+                <a href="{{ route('owner.products.product') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('owner.products.product') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Products
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('owner.stock.stocklist')" :active="request()->routeIs('owner.stock.stocklist')">
+                <a href="{{ route('owner.stock.stocklist') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('owner.stock.stocklist') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Stock
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('branches.index')" :active="request()->routeIs('branches.*')">
+                <a href="{{ route('branches.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('branches.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Cabang
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('kasir.index')" :active="request()->routeIs('kasir.*')">
+                <a href="{{ route('kasir.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('kasir.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Kasir
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('manajer.index')" :active="request()->routeIs('manajer.*')">
+                <a href="{{ route('manajer.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('manajer.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Manajer
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('supervisor.index')" :active="request()->routeIs('supervisor.*')">
+                <a href="{{ route('supervisor.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('supervisor.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Supervisor
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('owner.transactions.index')" :active="request()->routeIs('owner.transactions.index')">
-                    Transaksi Cabang
-                </x-responsive-nav-link>
+                <a href="{{ route('owner.transactions.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('owner.transactions.index') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
+                    Transaksi
+                </a>
 
 
             {{-- MANAJER RESPONSIVE --}}
             @elseif(Auth::user()->role == 'manajer')
 
-                <x-responsive-nav-link :href="route('manajer.dashboard')" :active="request()->routeIs('manajer.dashboard')">
+                <a href="{{ route('manajer.dashboard') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('manajer.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Dashboard
-                </x-responsive-nav-link>
+                </a>
 
-                <x-nav-link :href="route('manajer.produk-cabang.index')" :active="request()->routeIs('manajer.produk-cabang.index')">
-                     Produk Cabang
-                </x-nav-link>
+                <a href="{{ route('manajer.produk-cabang.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('manajer.produk-cabang.index') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
+                    Produk Cabang
+                </a>
 
-                <x-responsive-nav-link :href="route('manajer.stock.stocklist')" :active="request()->routeIs('manajer.stock.stocklist')">
-                    Stock
-                </x-responsive-nav-link>
-
-                <x-responsive-nav-link :href="route('manajer.transaksi.index')" :active="request()->routeIs('manajer.transaksi.index')">
+                <a href="{{ route('manajer.transaksi.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('manajer.transaksi.index') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Transaksi
-                </x-responsive-nav-link>
+                </a>
 
 
             {{-- KASIR RESPONSIVE --}}
             @elseif(Auth::user()->role == 'kasir')
 
-                <x-responsive-nav-link :href="route('kasir.dashboard')" :active="request()->routeIs('kasir.dashboard')">
+                <a href="{{ route('kasir.dashboard') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('kasir.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Dashboard
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('kasir.transaksi.index')" :active="request()->routeIs('kasir.transaksi.index')">
+                <a href="{{ route('kasir.transaksi.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('kasir.transaksi.index') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Transaksi
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('kasir.transaksi.create')" :active="request()->routeIs('kasir.transaksi.create')">
+                <a href="{{ route('kasir.transaksi.create') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('kasir.transaksi.create') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Buat Transaksi
-                </x-responsive-nav-link>
+                </a>
 
 
             {{-- GUDANG RESPONSIVE --}}
             @elseif(Auth::user()->role == 'gudang')
 
-                <x-responsive-nav-link :href="route('gudang.dashboard')" :active="request()->routeIs('gudang.dashboard')">
+                <a href="{{ route('gudang.dashboard') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('gudang.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Dashboard
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                <a href="{{ route('products.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('products.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Produk
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('stock.index')" :active="request()->routeIs('stock.*')">
+                <a href="{{ route('stock.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('stock.*') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Stock Movement
-                </x-responsive-nav-link>
+                </a>
 
 
             {{-- SUPERVISOR RESPONSIVE --}}
             @elseif(Auth::user()->role == 'supervisor')
 
-                <x-responsive-nav-link :href="route('supervisor.dashboard')" :active="request()->routeIs('supervisor.dashboard')">
+                <a href="{{ route('supervisor.dashboard') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('supervisor.dashboard') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Dashboard
-                </x-responsive-nav-link>
+                </a>
 
-                <x-responsive-nav-link :href="route('supervisor.transaksi.index')" :active="request()->routeIs('supervisor.transaksi.index')">
+                <a href="{{ route('supervisor.transaksi.index') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium transition
+                   {{ request()->routeIs('supervisor.transaksi.index') ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100' }}">
                     Transaksi
-                </x-responsive-nav-link>
+                </a>
 
             @endif
 
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <!-- Responsive User Info -->
+        <div class="px-4 pt-4 pb-5 border-t border-slate-200 bg-slate-50">
 
-            <div class="px-4">
+            <div class="flex items-center gap-3 mb-4">
 
-                <div class="font-medium text-base text-gray-800">
-                    {{ Auth::user()->name }}
+                <div class="w-11 h-11 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
 
-                <div class="font-medium text-sm text-gray-500">
-                    {{ Auth::user()->email }}
-                </div>
+                <div>
+                    <div class="font-semibold text-slate-800">
+                        {{ Auth::user()->name }}
+                    </div>
 
-                <div class="text-xs text-gray-400">
-                    Role : {{ Auth::user()->role }}
+                    <div class="text-sm text-slate-500">
+                        {{ Auth::user()->email }}
+                    </div>
+
+                    <div class="text-xs text-slate-400 capitalize">
+                        {{ Auth::user()->role }}
+                    </div>
                 </div>
 
             </div>
 
-            <div class="mt-3 space-y-1">
+            <div class="space-y-2">
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <a href="{{ route('profile.edit') }}"
+                   class="block px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-white transition">
                     Profile
-                </x-responsive-nav-link>
+                </a>
 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault();
-                        this.closest('form').submit();">
-
+                    <a
+                        href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); this.closest('form').submit();"
+                        class="block px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition"
+                    >
                         Log Out
-
-                    </x-responsive-nav-link>
+                    </a>
                 </form>
 
             </div>
