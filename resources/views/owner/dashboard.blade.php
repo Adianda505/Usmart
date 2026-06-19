@@ -1,270 +1,259 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Dashboard Owner
-        </h2>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+                <h2 class="font-bold text-2xl text-slate-800">
+                    Dashboard Owner
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">
+                    Ringkasan data toko, cabang, pengguna, transaksi, dan pendapatan UsMart.
+                </p>
+            </div>
+
+            <div class="px-4 py-2 bg-white border border-slate-200 rounded-xl shadow-sm">
+                <p class="text-xs text-slate-500">Login sebagai</p>
+                <p class="text-sm font-semibold text-slate-800">
+                    {{ Auth::user()->name }}
+                </p>
+            </div>
+        </div>
     </x-slot>
 
-    <div class="p-6">
+    <div class="py-8 bg-slate-50 min-h-screen">
 
-        {{-- CARD STATISTIK --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Cabang</p>
-                <h3 class="text-2xl font-bold">{{ $totalCabang }}</h3>
+            {{-- HERO / WELCOME --}}
+            <div class="bg-slate-900 rounded-3xl p-8 mb-8 shadow-xl overflow-hidden relative">
+
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20"></div>
+                <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full -ml-16 -mb-16"></div>
+
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+                    <div>
+                        <p class="text-slate-300 text-sm mb-2">
+                            Selamat datang kembali,
+                        </p>
+
+                        <h1 class="text-3xl md:text-4xl font-bold text-white">
+                            {{ Auth::user()->name }}
+                        </h1>
+
+                        <p class="text-slate-300 mt-3 max-w-2xl">
+                            Pantau perkembangan cabang, produk, pengguna, dan transaksi toko melalui halaman dashboard ini.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur rounded-2xl px-6 py-5 border border-white/10">
+                        <p class="text-slate-300 text-sm">
+                            Total Pendapatan
+                        </p>
+
+                        <h2 class="text-3xl font-bold text-white mt-1">
+                            Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+                        </h2>
+
+                        <p class="text-xs text-slate-400 mt-2">
+                            Akumulasi seluruh transaksi
+                        </p>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Produk</p>
-                <h3 class="text-2xl font-bold">{{ $totalProduk }}</h3>
-            </div>
+            {{-- CARD STATISTIK --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Kasir</p>
-                <h3 class="text-2xl font-bold">{{ $totalKasir }}</h3>
-            </div>
+                {{-- Total Cabang --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                            🏬
+                        </div>
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Manajer</p>
-                <h3 class="text-2xl font-bold">{{ $totalManajer }}</h3>
-            </div>
+                        <span class="text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                            Cabang
+                        </span>
+                    </div>
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Supervisor</p>
-                <h3 class="text-2xl font-bold">{{ $totalSupervisor }}</h3>
-            </div>
+                    <p class="text-sm text-slate-500">
+                        Total Cabang
+                    </p>
 
-            <div class="bg-white p-5 rounded shadow">
-                <p class="text-gray-500">Total Transaksi</p>
-                <h3 class="text-2xl font-bold">{{ $totalTransaksi }}</h3>
-            </div>
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalCabang }}
+                    </h3>
 
-            <div class="bg-white p-5 rounded shadow md:col-span-2">
-                <p class="text-gray-500">Total Pendapatan</p>
-                <h3 class="text-2xl font-bold">
-                    Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
-                </h3>
+                    <p class="text-xs text-slate-400 mt-3">
+                        Jumlah cabang yang terdaftar
+                    </p>
+                </div>
+
+                {{-- Total Produk --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                            📦
+                        </div>
+
+                        <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                            Produk
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Total Produk
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalProduk }}
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        Produk yang tersedia di sistem
+                    </p>
+                </div>
+
+                {{-- Total Kasir --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                            🧾
+                        </div>
+
+                        <span class="text-xs font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                            Kasir
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Total Kasir
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalKasir }}
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        Akun kasir yang aktif
+                    </p>
+                </div>
+
+                {{-- Total Manajer --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+                            👔
+                        </div>
+
+                        <span class="text-xs font-medium text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
+                            Manajer
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Total Manajer
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalManajer }}
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        Pengelola cabang terdaftar
+                    </p>
+                </div>
+
+                {{-- Total Supervisor --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                            🧑‍💼
+                        </div>
+
+                        <span class="text-xs font-medium text-rose-600 bg-rose-50 px-3 py-1 rounded-full">
+                            Supervisor
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Total Supervisor
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalSupervisor }}
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        Akun supervisor terdaftar
+                    </p>
+                </div>
+
+                {{-- Total Transaksi --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl">
+                            💳
+                        </div>
+
+                        <span class="text-xs font-medium text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">
+                            Transaksi
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Total Transaksi
+                    </p>
+
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                        {{ $totalTransaksi }}
+                    </h3>
+
+                    <p class="text-xs text-slate-400 mt-3">
+                        Jumlah transaksi seluruh cabang
+                    </p>
+                </div>
+
+                {{-- Total Pendapatan --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition sm:col-span-2">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl mb-5">
+                                💰
+                            </div>
+
+                            <p class="text-sm text-slate-500">
+                                Total Pendapatan
+                            </p>
+
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">
+                                Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+                            </h3>
+
+                            <p class="text-xs text-slate-400 mt-3">
+                                Total pendapatan dari seluruh transaksi
+                            </p>
+                        </div>
+
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100 min-w-[180px]">
+                            <p class="text-xs text-slate-500">
+                                Rata-rata / transaksi
+                            </p>
+
+                            <h4 class="text-xl font-bold text-slate-800 mt-1">
+                                Rp {{ $totalTransaksi > 0 ? number_format($totalPendapatan / $totalTransaksi, 0, ',', '.') : 0 }}
+                            </h4>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
-        {{-- MENU CEPAT --}}
-        {{-- <div class="bg-white p-5 rounded shadow mb-6">
-            <h3 class="text-lg font-semibold mb-4">Menu Cepat</h3>
-
-            <div class="flex flex-wrap gap-3">
-
-                <a href="{{ route('branches.index') }}"
-                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Kelola Cabang
-                </a>
-
-                <a href="{{ route('kasir.index') }}"
-                   class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Kelola Kasir
-                </a>
-
-                <a href="{{ route('products.index') }}"
-                   class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
-                    Lihat Produk
-                </a>
-
-                <a href="{{ route('stock.index') }}"
-                   class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
-                    Stock Movement
-                </a>
-
-                <a href="{{ route('owner.transactions') }}"
-                   class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">
-                    Lihat Transaksi
-                </a>
-
-            </div>
-        </div> --}}
-
-        {{-- DATA CABANG --}}
-        {{-- <div class="bg-white p-5 rounded shadow mb-6">
-            <h3 class="text-lg font-semibold mb-4">Data Cabang</h3>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Nama Cabang</th>
-                            <th class="border p-2">Kota</th>
-                            <th class="border p-2">Alamat</th>
-                            <th class="border p-2">Jumlah Kasir</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($branches as $branch)
-                            <tr>
-                                <td class="border p-2 text-center">{{ $loop->iteration }}</td>
-                                <td class="border p-2">{{ $branch->nama_cabang }}</td>
-                                <td class="border p-2">{{ $branch->kota }}</td>
-                                <td class="border p-2">{{ $branch->alamat }}</td>
-                                <td class="border p-2 text-center">{{ $branch->total_kasir }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="border p-3 text-center text-gray-500">
-                                    Belum ada data cabang.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div> --}}
-
-        {{-- TRANSAKSI TERBARU --}}
-        {{-- <div class="bg-white p-5 rounded shadow mb-6">
-            <h3 class="text-lg font-semibold mb-4">Transaksi Terbaru</h3>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Kode Transaksi</th>
-                            <th class="border p-2">Cabang</th>
-                            <th class="border p-2">Kasir</th>
-                            <th class="border p-2">Total</th>
-                            <th class="border p-2">Tanggal</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($transaksiTerbaru as $transaksi)
-                            <tr>
-                                <td class="border p-2 text-center">{{ $loop->iteration }}</td>
-                                <td class="border p-2">{{ $transaksi->kode_transaksi }}</td>
-                                <td class="border p-2">
-                                    {{ $transaksi->branch->nama_cabang ?? '-' }}
-                                </td>
-                                <td class="border p-2">
-                                    {{ $transaksi->user->name ?? '-' }}
-                                </td>
-                                <td class="border p-2">
-                                    Rp {{ number_format($transaksi->total, 0, ',', '.') }}
-                                </td>
-                                <td class="border p-2">
-                                    {{ $transaksi->tanggal ?? $transaksi->created_at->format('d-m-Y') }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="border p-3 text-center text-gray-500">
-                                    Belum ada transaksi.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div> --}}
-
-        {{-- STOK RENDAH --}}
-        {{-- <div class="bg-white p-5 rounded shadow mb-6">
-            <h3 class="text-lg font-semibold mb-4">Produk dengan Stok Rendah</h3>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Produk</th>
-                            <th class="border p-2">Cabang</th>
-                            <th class="border p-2">Stok</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($stokRendah as $stok)
-                            <tr>
-                                <td class="border p-2 text-center">{{ $loop->iteration }}</td>
-                                <td class="border p-2">
-                                    {{ $stok->product->nama_barang ?? '-' }}
-                                </td>
-                                <td class="border p-2">
-                                    {{ $stok->branch->nama_cabang ?? '-' }}
-                                </td>
-                                <td class="border p-2 text-center">
-                                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded">
-                                        {{ $stok->stok }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="border p-3 text-center text-gray-500">
-                                    Tidak ada stok rendah.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div> --}}
-
-        {{-- STOCK MOVEMENT TERBARU --}}
-        {{-- <div class="bg-white p-5 rounded shadow">
-            <h3 class="text-lg font-semibold mb-4">Stock Movement Terbaru</h3>
-
-            <div class="overflow-x-auto">
-                <table class="w-full border">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="border p-2">No</th>
-                            <th class="border p-2">Produk</th>
-                            <th class="border p-2">Cabang</th>
-                            <th class="border p-2">Tipe</th>
-                            <th class="border p-2">Qty</th>
-                            <th class="border p-2">Tanggal</th>
-                            <th class="border p-2">Keterangan</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($stockMovements as $movement)
-                            <tr>
-                                <td class="border p-2 text-center">{{ $loop->iteration }}</td>
-                                <td class="border p-2">
-                                    {{ $movement->product->nama_barang ?? '-' }}
-                                </td>
-                                <td class="border p-2">
-                                    {{ $movement->branch->nama_cabang ?? '-' }}
-                                </td>
-                                <td class="border p-2 text-center">
-                                    @if ($movement->type == 'masuk')
-                                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded">
-                                            Masuk
-                                        </span>
-                                    @else
-                                        <span class="bg-red-100 text-red-700 px-3 py-1 rounded">
-                                            Keluar
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="border p-2 text-center">{{ $movement->qty }}</td>
-                                <td class="border p-2">{{ $movement->tanggal }}</td>
-                                <td class="border p-2">{{ $movement->keterangan ?? '-' }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="border p-3 text-center text-gray-500">
-                                    Belum ada data stock movement.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div> --}}
 
     </div>
 
