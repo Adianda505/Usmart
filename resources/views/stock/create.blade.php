@@ -18,7 +18,7 @@
 
             <div class="bg-white shadow-lg rounded-xl overflow-hidden">
 
-                <div class="px-6 py-5 border-b bg-gradient-to-r from-blue-600 to-indigo-600">
+                <div class="px-6 py-5 border-b bg-slate-900">
                     <h3 class="text-lg font-semibold text-white">
                         Form Tambah Data Stok
                     </h3>
@@ -127,7 +127,7 @@
 
                     {{-- INFO BOX --}}
                     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p class="text-sm text-blue-700">
+                        <p class="text-sm text-slate-900">
                             <span class="font-semibold">Catatan:</span>
                             Pilih <b>Barang Masuk</b> jika stok bertambah, dan pilih <b>Barang Keluar</b> jika barang dikirim atau dikeluarkan ke cabang.
                         </p>
@@ -141,7 +141,7 @@
                         </a>
 
                         <button type="submit"
-                                class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow transition">
+                                class="px-5 py-2.5 bg-slate-900 text-white rounded-lg ">
                             Simpan Data
                         </button>
                     </div>

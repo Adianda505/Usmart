@@ -1,13 +1,18 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800">
-                Tambah Akun Supervisor
-            </h2>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">
+                    Tambah Akun Supervisor
+                </h2>
+                <p class="text-sm text-gray-500 mt-1">
+                    Tambahkan akun supervisor dan hubungkan dengan cabang
+                </p>
+            </div>
 
             <a href="{{ route('supervisor.index') }}"
-               class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+               class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg shadow transition duration-200">
                 Kembali
             </a>
         </div>
@@ -15,99 +20,144 @@
 
     <div class="p-6">
 
-        @if ($errors->any())
-            <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
-                <ul class="list-disc ml-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+
+            {{-- Card Header --}}
+            <div class="px-8 py-5 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Form Tambah Supervisor
+                </h3>
+                <p class="text-sm text-gray-500 mt-1">
+                    Lengkapi data akun supervisor dengan benar
+                </p>
             </div>
-        @endif
 
-        <div class="bg-white p-6 rounded shadow max-w-xl">
+            <div class="p-8">
+                <form action="{{ route('supervisor.store') }}"
+                      method="POST"
+                      class="space-y-6">
 
-            <form action="{{ route('supervisor.store') }}" method="POST">
-                @csrf
+                    @csrf
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        Nama Supervisor
-                    </label>
-                    <input type="text"
-                           name="name"
-                           value="{{ old('name') }}"
-                           class="w-full border rounded px-3 py-2"
-                           placeholder="Masukkan nama supervisor"
-                           required>
-                </div>
+                    {{-- Nama Supervisor --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Nama Supervisor
+                        </label>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        Email
-                    </label>
-                    <input type="email"
-                           name="email"
-                           value="{{ old('email') }}"
-                           class="w-full border rounded px-3 py-2"
-                           placeholder="Masukkan email"
-                           required>
-                </div>
+                        <input type="text"
+                               name="name"
+                               value="{{ old('name') }}"
+                               placeholder="Contoh: Siti Aminah"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
+                               required>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        Password
-                    </label>
-                    <input type="password"
-                           name="password"
-                           class="w-full border rounded px-3 py-2"
-                           placeholder="Masukkan password"
-                           required>
-                </div>
+                        @error('name')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        Konfirmasi Password
-                    </label>
-                    <input type="password"
-                           name="password_confirmation"
-                           class="w-full border rounded px-3 py-2"
-                           placeholder="Ulangi password"
-                           required>
-                </div>
+                    {{-- Email --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Email
+                        </label>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 font-semibold mb-2">
-                        Cabang
-                    </label>
+                        <input type="email"
+                               name="email"
+                               value="{{ old('email') }}"
+                               placeholder="Contoh: supervisor@example.com"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
+                               required>
 
-                    <select name="branch_id"
-                            class="w-full border rounded px-3 py-2"
-                            required>
-                        <option value="">-- Pilih Cabang --</option>
+                        @error('email')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                        @foreach ($branches as $branch)
-                            <option value="{{ $branch->id }}"
-                                {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
-                                {{ $branch->nama_cabang }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    {{-- Password --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Password
+                        </label>
 
-                <div class="flex gap-2">
-                    <button type="submit"
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Simpan
-                    </button>
+                        <input type="password"
+                               name="password"
+                               placeholder="Masukkan password akun supervisor"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
+                               required>
 
-                    <a href="{{ route('supervisor.index') }}"
-                       class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                        Batal
-                    </a>
-                </div>
+                        @error('password')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-            </form>
+                    {{-- Konfirmasi Password --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Konfirmasi Password
+                        </label>
+
+                        <input type="password"
+                               name="password_confirmation"
+                               placeholder="Ulangi password akun supervisor"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
+                               required>
+
+                        @error('password_confirmation')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Cabang --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Cabang
+                        </label>
+
+                        <select name="branch_id"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500"
+                                required>
+                            <option value="">-- Pilih Cabang --</option>
+
+                            @foreach ($branches as $branch)
+                                <option value="{{ $branch->id }}"
+                                    {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
+                                    {{ $branch->nama_cabang }}
+                                    @if($branch->kota)
+                                        - {{ $branch->kota }}
+                                    @endif
+                                </option>
+                            @endforeach
+                        </select>
+
+                        @error('branch_id')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Button --}}
+                    <div class="flex items-center justify-end gap-3 pt-2">
+
+                        <button type="submit"
+                                class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl shadow-md transition">
+                            Simpan Supervisor
+                        </button>
+
+                    </div>
+
+                </form>
+            </div>
 
         </div>
 

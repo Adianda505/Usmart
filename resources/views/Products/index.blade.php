@@ -1,113 +1,173 @@
 <x-app-layout>
 
     <x-slot name="header">
-    <div class="flex items-center justify-between">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Tambah Produk
-        </h2>
-        {{-- Create Product --}}
-        <a href="{{ route('products.create') }}"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-            + Create Product
-        </a>
-    </div>
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">
+                    Data Produk
+                </h2>
+                <p class="text-sm text-gray-500 mt-1">
+                    Kelola data produk, kategori, harga, dan stok barang
+                </p>
+            </div>
+
+            <a href="{{ route('products.create') }}"
+               class="inline-flex items-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg shadow transition duration-200">
+                + Tambah Produk
+            </a>
+        </div>
     </x-slot>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Produk</title>
+    <div class="p-6">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+        {{-- Alert Success --}}
+        @if(session('success'))
+            <div class="mb-5 flex items-center gap-3 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl shadow-sm">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="font-medium">
+                    {{ session('success') }}
+                </span>
+            </div>
+        @endif
 
-<div class="max-w-5xl mx-auto mt-10 bg-white p-6 rounded shadow">
+        {{-- Card --}}
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
 
-    <div class="flex justify-between mb-5">
-        <h1 class="text-2xl font-bold">
-            Data Produk
-        </h1>
-    </div>
+            {{-- Card Header --}}
+            <div class="px-6 py-5 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Daftar Produk
+                </h3>
+                <p class="text-sm text-gray-500 mt-1">
+                    Menampilkan seluruh produk yang tersedia di gudang
+                </p>
+            </div>
 
-    @if(session('success'))
-        <div class="bg-green-200 text-green-800 p-3 mb-4 rounded">
-            {{ session('success') }}
+            <div class="overflow-x-auto">
+
+                <table class="w-full text-sm text-left text-gray-600">
+
+                    <thead class="bg-slate-900 text-white uppercase text-xs tracking-wider">
+                        <tr>
+                            <th class="px-6 py-4 font-semibold">No</th>
+                            <th class="px-6 py-4 font-semibold">Kategori</th>
+                            <th class="px-6 py-4 font-semibold">Nama Barang</th>
+                            <th class="px-6 py-4 font-semibold text-right">Harga</th>
+                            <th class="px-6 py-4 font-semibold text-center">Stok</th>
+                            <th class="px-6 py-4 font-semibold text-center">Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-gray-100 bg-white">
+
+                        @forelse($products as $product)
+                            <tr class="hover:bg-slate-50 transition duration-150">
+
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-700 font-semibold">
+                                        {{ $loop->iteration }}
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    @if($product->category)
+                                        <span class="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                                            {{ $product->category->nama_kategori }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                                            -
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-gray-900">
+                                        {{ $product->nama_barang }}
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">
+                                        Produk ID: {{ $product->id }}
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4 text-right">
+                                    <span class="font-semibold text-gray-900">
+                                        Rp {{ number_format($product->harga, 0, ',', '.') }}
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4 text-center">
+                                    @if($product->stok > 0)
+                                        <span class="inline-flex items-center justify-center min-w-10 px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100 font-semibold">
+                                            {{ $product->stok }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center justify-center min-w-10 px-3 py-1 rounded-full bg-red-50 text-red-700 border border-red-100 font-semibold">
+                                            Habis
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-center gap-2">
+
+                                        {{-- Edit --}}
+                                        <a href="{{ route('products.edit', $product->id) }}"
+                                           class="inline-flex items-center px-3 py-2 bg-amber-400 hover:bg-amber-500 text-white rounded-lg shadow-sm text-sm font-medium transition">
+                                            Edit
+                                        </a>
+
+                                        {{-- Delete --}}
+                                        <form action="{{ route('products.destroy', $product->id) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit"
+                                                    class="inline-flex items-center px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-sm text-sm font-medium transition">
+                                                Hapus
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-14 text-center">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <div class="w-14 h-14 flex items-center justify-center rounded-full bg-slate-100 text-slate-500 mb-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                            </svg>
+                                        </div>
+
+                                        <h4 class="text-gray-700 font-semibold">
+                                            Belum ada data produk
+                                        </h4>
+
+                                        <p class="text-gray-400 text-sm mt-1">
+                                            Silakan tambahkan produk terlebih dahulu.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
-    @endif
-
-    <table class="w-full border">
-        <thead class="bg-gray-200">
-            <tr>
-                <th class="border p-2">No</th>
-                <th class="border p-2">Kategori</th>
-                <th class="border p-2">Nama Barang</th>
-                <th class="border p-2">Harga</th>
-                <th class="border p-2">Stok</th>
-                <th class="border p-2">Aksi</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach($products as $product)
-            <tr>
-                <td class="border p-2">
-                    {{ $loop->iteration }}
-                </td>
-
-                <td class="border p-2">
-                    {{ $product->category->nama_kategori ?? '-' }}
-                </td>
-
-                <td class="border p-2">
-                    {{ $product->nama_barang }}
-                </td>
-
-                <td class="border p-2">
-                    Rp {{ number_format($product->harga) }}
-                </td>
-
-                <td class="border p-2">
-                    {{ $product->stok }}
-                </td>
-
-                <td class="border p-2">
-
-    <div class="flex gap-2">
-
-        <a href="{{ route('products.edit', $product->id) }}"
-            class="bg-yellow-400 text-white px-3 py-1 rounded">
-
-            Edit
-
-        </a>
-
-        <form action="{{ route('products.destroy', $product->id) }}"
-            method="POST">
-
-            @csrf
-            @method('DELETE')
-
-            <button type="submit"
-                onclick="return confirm('Yakin hapus produk?')"
-                class="bg-red-500 text-white px-3 py-1 rounded">
-
-                Hapus
-
-            </button>
-
-        </form>
 
     </div>
 
-</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-</div>
-
-</body>
-</html>
 </x-app-layout>

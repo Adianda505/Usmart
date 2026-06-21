@@ -1,20 +1,27 @@
 <x-app-layout>
 
     <x-slot name="header">
+        <div class="flex items-center justify-between">
         <h2 class="font-semibold text-xl text-gray-800">
             Produk Cabang Saya
         </h2>
+
+        <a href="{{ route('manajer.products.exportPdf') }}"
+            class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+            Export PDF
+        </a>
+    </div>
     </x-slot>
 
     <div class="p-6">
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="bg-green-200 text-green-700 p-3 rounded mb-4">
                 {{ session('success') }}
             </div>
         @endif
 
-        @if(session('error'))
+        @if (session('error'))
             <div class="bg-red-200 text-red-700 p-3 rounded mb-4">
                 {{ session('error') }}
             </div>

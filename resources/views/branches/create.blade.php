@@ -75,13 +75,8 @@
                 {{-- Button --}}
                 <div class="flex items-center justify-end gap-3">
 
-                    <a href="{{ route('branches.index') }}"
-                       class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
-                        Kembali
-                    </a>
-
                     <button type="submit"
-                            class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md transition">
+                            class="px-6 py-2.5 bg-slate-900 text-white font-semibold rounded-xl shadow-md transition">
                         Simpan Cabang
                     </button>
 

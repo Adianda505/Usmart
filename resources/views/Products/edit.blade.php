@@ -1,100 +1,139 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Edit Produk
-        </h2>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">
+                Edit Produk
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">
+                Perbarui data produk, kategori, harga, stok, dan barcode
+            </p>
+        </div>
     </x-slot>
 
     <div class="p-6">
 
-        <div class="max-w-2xl bg-white p-6 rounded shadow">
+        <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
 
-            <form action="{{ route('products.update', $product->id) }}"
-                method="POST">
+            {{-- Card Header --}}
+            <div class="px-8 py-5 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Form Edit Produk
+                </h3>
+                <p class="text-sm text-gray-500 mt-1">
+                    Ubah data produk sesuai kebutuhan
+                </p>
+            </div>
 
-                @csrf
-                @method('PUT')
+            <div class="p-8">
 
-                <!-- CATEGORY -->
-                <div class="mb-4">
-                    <label class="block mb-1 font-semibold">
-                        Kategori
-                    </label>
+                <form action="{{ route('products.update', $product->id) }}"
+                      method="POST"
+                      class="space-y-6">
 
-                    <select name="category_id"
-                        class="w-full border rounded p-2">
+                    @csrf
+                    @method('PUT')
 
-                        @foreach($categories as $category)
+                    {{-- Kategori --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Kategori
+                        </label>
 
-                            <option value="{{ $category->id }}"
-                                {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                        <select name="category_id"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500">
+                            <option value="">-- Pilih Kategori --</option>
 
-                                {{ $category->nama_kategori }}
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->nama_kategori }}
+                                </option>
+                            @endforeach
+                        </select>
 
-                            </option>
+                        @error('category_id')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                        @endforeach
+                    {{-- Nama Barang --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Nama Barang
+                        </label>
 
-                    </select>
-                </div>
+                        <input type="text"
+                               name="nama_barang"
+                               value="{{ old('nama_barang', $product->nama_barang) }}"
+                               placeholder="Contoh: Indomie Goreng"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500">
 
-                <!-- NAMA -->
-                <div class="mb-4">
-                    <label class="block mb-1 font-semibold">
-                        Nama Barang
-                    </label>
+                        @error('nama_barang')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                    <input type="text"
-                        name="nama_barang"
-                        value="{{ $product->nama_barang }}"
-                        class="w-full border rounded p-2">
-                </div>
+                    {{-- Harga --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Harga
+                        </label>
 
-                <!-- HARGA -->
-                <div class="mb-4">
-                    <label class="block mb-1 font-semibold">
-                        Harga
-                    </label>
+                        <input type="number"
+                               name="harga"
+                               value="{{ old('harga', $product->harga) }}"
+                               placeholder="Contoh: 5000"
+                               min="0"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500">
 
-                    <input type="number"
-                        name="harga"
-                        value="{{ $product->harga }}"
-                        class="w-full border rounded p-2">
-                </div>
+                        @error('harga')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                <!-- STOK -->
-                <div class="mb-4">
-                    <label class="block mb-1 font-semibold">
-                        Stok
-                    </label>
+                    {{-- Stok --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-semibold text-gray-700">
+                            Stok
+                        </label>
 
-                    <input type="number"
-                        name="stok"
-                        value="{{ $product->stok }}"
-                        class="w-full border rounded p-2">
-                </div>
+                        <input type="number"
+                               name="stok"
+                               value="{{ old('stok', $product->stok) }}"
+                               placeholder="Contoh: 100"
+                               min="0"
+                               class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-2 focus:ring-slate-500 focus:border-slate-500">
 
-                <!-- BARCODE -->
-                <div class="mb-4">
-                    <label class="block mb-1 font-semibold">
-                        Barcode
-                    </label>
+                        @error('stok')
+                            <p class="mt-1 text-sm text-red-500">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
 
-                    <input type="text"
-                        name="barcode"
-                        value="{{ $product->barcode }}"
-                        class="w-full border rounded p-2">
-                </div>
 
-                <button type="submit"
-                    class="bg-blue-500 text-white px-5 py-2 rounded">
+                    {{-- Button --}}
+                    <div class="flex items-center justify-end gap-3 pt-2">
 
-                    Update Produk
 
-                </button>
 
-            </form>
+                        <button type="submit"
+                                class="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl shadow-md transition">
+                            Update Produk
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
 
         </div>
 

@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Laporan Transaksi Supervisor</title>
+    <title>Laporan Data User {{ $roleTitle }}</title>
 
     <style>
         body {
             font-family: DejaVu Sans, sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             color: #111827;
         }
 
@@ -19,7 +19,6 @@
         .header h2 {
             margin: 0;
             font-size: 18px;
-            font-weight: bold;
         }
 
         .header p {
@@ -28,85 +27,38 @@
             font-size: 11px;
         }
 
-        .info {
-            margin-bottom: 14px;
-            font-size: 11px;
-        }
-
-        .info table {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .info td {
-            border: none;
-            padding: 3px 0;
-        }
-
-        .info .label {
-            width: 130px;
-            font-weight: bold;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
+        th {
             background-color: #f3f4f6;
             color: #374151;
             border: 1px solid #d1d5db;
             padding: 8px 6px;
             text-transform: uppercase;
-            font-size: 9px;
+            font-size: 10px;
             text-align: left;
         }
 
-        .data-table td {
+        td {
             border: 1px solid #d1d5db;
             padding: 7px 6px;
-            vertical-align: middle;
         }
 
         .text-center {
             text-align: center;
         }
 
-        .text-right {
-            text-align: right;
-        }
-
-        .font-semibold {
-            font-weight: bold;
-        }
-
         .badge {
             display: inline-block;
-            padding: 3px 7px;
+            padding: 3px 8px;
             border-radius: 10px;
             font-size: 9px;
             font-weight: bold;
-        }
-
-        .badge-cash {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-
-        .badge-qris {
             background-color: #dbeafe;
             color: #1d4ed8;
-        }
-
-        .badge-ewallet {
-            background-color: #f3e8ff;
-            color: #7e22ce;
-        }
-
-        .badge-transfer {
-            background-color: #fef9c3;
-            color: #854d0e;
         }
 
         .muted {
@@ -124,103 +76,48 @@
 <body>
 
     <div class="header">
-        <h2>Laporan Transaksi Supervisor</h2>
-        <p>Menampilkan data transaksi berdasarkan cabang supervisor yang sedang login</p>
+        <h2>Laporan Data User {{ $roleTitle }}</h2>
+        <p>Menampilkan seluruh data user dengan role {{ $roleTitle }}</p>
     </div>
 
-    <div class="info">
-        <table>
-            <tr>
-                <td class="label">Nama Supervisor</td>
-                <td>: {{ $supervisor->name }}</td>
-            </tr>
-            <tr>
-                <td class="label">Cabang</td>
-                <td>: {{ $branch->nama_cabang ?? '-' }}</td>
-            </tr>
-            <tr>
-                <td class="label">Tanggal Cetak</td>
-                <td>: {{ now()->format('d-m-Y H:i') }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <table class="data-table">
+    <table>
         <thead>
             <tr>
-                <th class="text-center" width="4%">No</th>
-                <th width="14%">Kode Transaksi</th>
-                <th width="13%">Cabang</th>
-                <th width="12%">Kasir</th>
-                <th width="10%">Metode</th>
-                <th class="text-right" width="13%">Total</th>
-                <th class="text-right" width="12%">Uang Tunai</th>
-                <th class="text-right" width="12%">Kembalian</th>
-                <th width="10%">Tanggal</th>
+                <th class="text-center" width="5%">No</th>
+                <th width="25%">Nama</th>
+                <th width="25%">Email</th>
+                <th width="15%">Role</th>
+                <th width="30%">Cabang</th>
             </tr>
         </thead>
 
         <tbody>
-            @forelse($transactions as $transaction)
+            @forelse($users as $user)
                 <tr>
-                    <td class="text-center">
-                        {{ $loop->iteration }}
-                    </td>
+                    <td class="text-center">{{ $loop->iteration }}</td>
 
-                    <td class="font-semibold">
-                        {{ $transaction->kode_transaksi }}
+                    <td>
+                        {{ $user->name }}
                     </td>
 
                     <td>
-                        {{ $transaction->branch->nama_cabang ?? '-' }}
+                        {{ $user->email }}
                     </td>
 
                     <td>
-                        {{ $transaction->kasir->name ?? '-' }}
+                        <span class="badge">
+                            {{ ucfirst($user->role) }}
+                        </span>
                     </td>
 
                     <td>
-                        @if($transaction->payment_method == 'cash')
-                            <span class="badge badge-cash">Cash</span>
-                        @elseif($transaction->payment_method == 'qris')
-                            <span class="badge badge-qris">QRIS</span>
-                        @elseif($transaction->payment_method == 'e_wallet')
-                            <span class="badge badge-ewallet">E-Wallet</span>
-                        @elseif($transaction->payment_method == 'transfer')
-                            <span class="badge badge-transfer">Transfer</span>
-                        @else
-                            <span class="muted">-</span>
-                        @endif
-                    </td>
-
-                    <td class="text-right font-semibold">
-                        Rp {{ number_format($transaction->total, 0, ',', '.') }}
-                    </td>
-
-                    <td class="text-right">
-                        @if($transaction->cash_received)
-                            Rp {{ number_format($transaction->cash_received, 0, ',', '.') }}
-                        @else
-                            -
-                        @endif
-                    </td>
-
-                    <td class="text-right">
-                        @if($transaction->change_amount)
-                            Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}
-                        @else
-                            -
-                        @endif
-                    </td>
-
-                    <td>
-                        {{ $transaction->tanggal }}
+                        {{ $user->branch->nama_cabang ?? '-' }}
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="9" class="text-center muted">
-                        Belum ada transaksi pada cabang ini.
+                    <td colspan="5" class="text-center muted">
+                        Belum ada data user {{ $roleTitle }}.
                     </td>
                 </tr>
             @endforelse
@@ -228,9 +125,8 @@
     </table>
 
     <div class="footer">
-        Laporan Transaksi Supervisor - {{ config('app.name') }}
+        Dicetak pada: {{ now()->format('d-m-Y H:i') }}
     </div>
 
 </body>
-
 </html>
