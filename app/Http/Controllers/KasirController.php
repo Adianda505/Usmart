@@ -7,10 +7,12 @@ use App\Models\BranchProductStock;
 use App\Models\User;
 use App\Models\Transactions;
 use App\Models\Transactions_detail;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class KasirController extends Controller
 {
@@ -18,6 +20,57 @@ class KasirController extends Controller
      * Tampilkan daftar kasir
      * Untuk owner
      */
+
+    public function dashboard()
+{
+    $kasir = Auth::user();
+
+    $branchId = $kasir->branch_id;
+
+    $today = Carbon::today();
+
+    // Total transaksi hari ini
+    $totalTransaksiHariIni = Transactions::where('branch_id', $branchId)
+        ->whereDate('tanggal', $today)
+        ->count();
+
+    // Total pendapatan hari ini
+    $pendapatanHariIni = Transactions::where('branch_id', $branchId)
+        ->whereDate('tanggal', $today)
+        ->sum('total');
+
+    // Total semua transaksi cabang kasir
+    $totalSemuaTransaksi = Transactions::where('branch_id', $branchId)
+        ->count();
+
+    // Total pendapatan semua transaksi cabang kasir
+    $totalPendapatan = Transactions::where('branch_id', $branchId)
+        ->sum('total');
+
+    // Ringkasan metode pembayaran
+    $metodePembayaran = Transactions::selectRaw('payment_method, COUNT(*) as total_transaksi, SUM(total) as total_pendapatan')
+        ->where('branch_id', $branchId)
+        ->groupBy('payment_method')
+        ->get();
+
+    // Transaksi terbaru
+    $transactions = Transactions::with(['branch', 'user'])
+        ->where('branch_id', $branchId)
+        ->latest()
+        ->take(10)
+        ->get();
+
+    return view('kasir.dashboard', compact(
+        'kasir',
+        'totalTransaksiHariIni',
+        'pendapatanHariIni',
+        'totalSemuaTransaksi',
+        'totalPendapatan',
+        'metodePembayaran',
+        'transactions'
+    ));
+}
+
     public function index()
     {
         $kasirs = User::with('branch')
@@ -160,61 +213,79 @@ class KasirController extends Controller
      * Simpan transaksi
      * Untuk kasir
      */
-    public function storeTransaksi(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'qty' => 'required|integer|min:1',
-        ]);
+  public function storeTransaksi(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'qty' => 'required|integer|min:1',
+        'payment_method' => 'required|in:cash,qris,e_wallet,transfer',
+        'cash_received' => 'nullable|numeric|min:0',
+    ]);
 
+    DB::beginTransaction();
+
+    try {
         $branchId = Auth::user()->branch_id;
 
-        DB::beginTransaction();
+        $product = Product::findOrFail($request->product_id);
 
-        try {
-            $branchStock = BranchProductStock::with('product')
-                ->where('branch_id', $branchId)
-                ->where('product_id', $request->product_id)
-                ->firstOrFail();
+        $branchStock = BranchProductStock::where('branch_id', $branchId)
+            ->where('product_id', $request->product_id)
+            ->first();
 
-            if ($branchStock->stok < $request->qty) {
-                throw new \Exception('Stok produk di cabang tidak mencukupi.');
+        if (!$branchStock || $branchStock->stok < $request->qty) {
+            return back()->with('error', 'Stok produk tidak mencukupi.');
+        }
+
+        $total = $product->harga * $request->qty;
+
+        $cashReceived = null;
+        $changeAmount = null;
+
+        if ($request->payment_method === 'cash') {
+            if ($request->cash_received === null) {
+                return back()->with('error', 'Uang tunai wajib diisi untuk pembayaran cash.');
             }
 
-            $harga = $branchStock->product->harga;
-            $subtotal = $harga * $request->qty;
+            if ($request->cash_received < $total) {
+                return back()->with('error', 'Uang tunai kurang dari total pembayaran.');
+            }
 
-            $transaction = Transactions::create([
-                'kode_transaksi' => 'TRX-' . time(),
-                'user_id' => Auth::id(),
-                'branch_id' => $branchId,
-                'total' => $subtotal,
-                'tanggal' => now(),
-            ]);
-
-            Transactions_detail::create([
-                'transaction_id' => $transaction->id,
-                'product_id' => $request->product_id,
-                'qty' => $request->qty,
-                'harga' => $harga,
-                'subtotal' => $subtotal,
-            ]);
-
-            $branchStock->stok -= $request->qty;
-            $branchStock->save();
-
-            DB::commit();
-
-            return redirect()
-                ->route('kasir.transaksi.index')
-                ->with('success', 'Transaksi berhasil disimpan.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return back()
-                ->withInput()
-                ->with('error', 'Transaksi gagal: ' . $e->getMessage());
+            $cashReceived = $request->cash_received;
+            $changeAmount = $cashReceived - $total;
         }
+
+        $transaction = Transactions::create([
+            'kode_transaksi' => 'TRX-' . time(),
+            'user_id' => Auth::id(),
+            'branch_id' => $branchId,
+            'total' => $total,
+            'payment_method' => $request->payment_method,
+            'cash_received' => $cashReceived,
+            'change_amount' => $changeAmount,
+            'tanggal' => now(),
+        ]);
+
+        Transactions_detail::create([
+            'transaction_id' => $transaction->id,
+            'product_id' => $request->product_id,
+            'qty' => $request->qty,
+            'harga' => $product->harga,
+            'subtotal' => $total,
+        ]);
+
+        $branchStock->decrement('stok', $request->qty);
+
+        DB::commit();
+
+        return redirect()
+            ->route('kasir.transaksi.index')
+            ->with('success', 'Transaksi berhasil disimpan.');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
+}
 }
