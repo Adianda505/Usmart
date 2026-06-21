@@ -1,14 +1,18 @@
 <?php
 
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\GudangDashboardController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\ManagerDashboardController;
+use App\Http\Controllers\OwnerDashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportExportController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\SupervisorDashboardController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\OwnerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +22,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/user', function () {
     return 'Halaman User';
 })->name('user.index');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +46,6 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Role: Owner
@@ -55,6 +57,26 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
     Route::get('/owner/dashboard', [OwnerDashboardController::class, 'index'])
         ->name('owner.dashboard');
 
+    Route::get('/owner/transactions/export/pdf', [TransactionController::class, 'exportPdf'])
+        ->name('owner.transactions.exportPdf');
+
+    Route::get('/owner/export/products/pdf', [ReportExportController::class, 'products'])
+        ->name('owner.products.exportPdf');
+
+    Route::get('/owner/export/stock/pdf', [ReportExportController::class, 'stock'])
+        ->name('owner.stock.exportPdf');
+
+    Route::get('/owner/export/branches/pdf', [ReportExportController::class, 'branches'])
+        ->name('owner.branches.exportPdf');
+
+    Route::get('/owner/export/users/kasir/pdf', [ReportExportController::class, 'kasir'])
+        ->name('owner.users.kasir.exportPdf');
+
+    Route::get('/owner/export/users/manajer/pdf', [ReportExportController::class, 'manajer'])
+        ->name('owner.users.manajer.exportPdf');
+
+    Route::get('/owner/export/users/supervisor/pdf', [ReportExportController::class, 'supervisor'])
+        ->name('owner.users.supervisor.exportPdf');
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +86,6 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 
     Route::get('/owner/transactions', [TransactionController::class, 'index'])
         ->name('owner.transactions.index');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +98,6 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 
     Route::get('/owner/stock/stocklist', [StockMovementController::class, 'indexview'])
         ->name('owner.stock.stocklist');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -103,7 +123,6 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
     Route::delete('/owner/kasir/{id}', [KasirController::class, 'destroy'])
         ->name('kasir.destroy');
 
-
     /*
     |--------------------------------------------------------------------------
     | Owner - Manajemen Data Manajer
@@ -127,7 +146,6 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 
     Route::delete('/owner/manajer/{id}', [ManagerController::class, 'destroy'])
         ->name('manajer.destroy');
-
 
     /*
     |--------------------------------------------------------------------------
@@ -154,7 +172,6 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
         ->name('supervisor.destroy');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Role: Kasir
@@ -163,10 +180,8 @@ Route::middleware(['auth', 'role:owner'])->group(function () {
 
 Route::middleware(['auth', 'role:kasir'])->group(function () {
 
-    Route::get('/kasir/dashboard', function () {
-        return view('kasir.dashboard');
-    })->name('kasir.dashboard');
-
+    Route::get('/kasir/dashboard', [KasirController::class, 'dashboard'])
+        ->name('kasir.dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -184,19 +199,25 @@ Route::middleware(['auth', 'role:kasir'])->group(function () {
         ->name('kasir.transaksi.store');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Role: Manajer
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:manajer'])->group(function () {
+Route::middleware(['auth', 'role:manajer,supervisor'])->group(function () {
 
-    Route::get('/manajer/dashboard', function () {
-        return view('manajer.dashboard');
-    })->name('manajer.dashboard');
+    // Route::get('/manajer/dashboard', function () {
+    //     return view('manajer.dashboard');
+    // })->name('manajer.dashboard');
+    Route::get('/manajer/dashboard', [ManagerDashboardController::class, 'index'])
+        ->name('manajer.dashboard');
 
+    Route::get('/manajer/produk-cabang/export/pdf', [ReportExportController::class, 'managerBranchProducts'])
+        ->name('manajer.products.exportPdf');
+
+    Route::get('/transaksi-cabang/export/pdf', [ReportExportController::class, 'branchTransactions'])
+        ->name('branch.transactions.exportPdf');
 
     /*
     |--------------------------------------------------------------------------
@@ -209,10 +230,9 @@ Route::middleware(['auth', 'role:manajer'])->group(function () {
 
     Route::get('/manajer/stock/stocklist', [StockMovementController::class, 'indexview'])
         ->name('manajer.stock.stocklist');
-    
-    Route::get('/manajer/produk-cabang', [ProductController::class, 'managerBranchProducts'])
-    ->name('manajer.produk-cabang.index');
 
+    Route::get('/manajer/produk-cabang', [ProductController::class, 'managerBranchProducts'])
+        ->name('manajer.produk-cabang.index');
 
     /*
     |--------------------------------------------------------------------------
@@ -224,7 +244,6 @@ Route::middleware(['auth', 'role:manajer'])->group(function () {
         ->name('manajer.transaksi.index');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Role: Gudang, Manajer, Owner
@@ -233,10 +252,8 @@ Route::middleware(['auth', 'role:manajer'])->group(function () {
 
 Route::middleware(['auth', 'role:gudang,manajer,owner'])->group(function () {
 
-    Route::get('/gudang/dashboard', function () {
-        return view('gudang.dashboard');
-    })->name('gudang.dashboard');
-
+    Route::get('/gudang/dashboard', [GudangDashboardController::class, 'index'])
+        ->name('gudang.dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -262,7 +279,6 @@ Route::middleware(['auth', 'role:gudang,manajer,owner'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])
         ->name('products.destroy');
 
-
     /*
     |--------------------------------------------------------------------------
     | Manajemen Pergerakan Stok
@@ -278,7 +294,6 @@ Route::middleware(['auth', 'role:gudang,manajer,owner'])->group(function () {
     Route::post('/stock-movements/store', [StockMovementController::class, 'store'])
         ->name('stock.store');
 
-
     /*
     |--------------------------------------------------------------------------
     | Manajemen Cabang
@@ -288,7 +303,6 @@ Route::middleware(['auth', 'role:gudang,manajer,owner'])->group(function () {
     Route::resource('branches', BranchController::class);
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Role: Supervisor
@@ -297,11 +311,11 @@ Route::middleware(['auth', 'role:gudang,manajer,owner'])->group(function () {
 
 Route::middleware(['auth', 'role:supervisor'])->group(function () {
 
-    Route::get('/supervisor/dashboard', function () {
-        return view('supervisor.dashboard');
-    })->name('supervisor.dashboard');
+    Route::get('/supervisor/dashboard', [SupervisorDashboardController::class, 'index'])
+        ->name('supervisor.dashboard');
 
-
+    Route::get('/supervisor/transaksi-cabang/export/pdf', [ReportExportController::class, 'supervisorBranchTransactions'])
+        ->name('supervisor.transactions.exportPdf');
     /*
     |--------------------------------------------------------------------------
     | Supervisor - Lihat Transaksi
@@ -312,11 +326,10 @@ Route::middleware(['auth', 'role:supervisor'])->group(function () {
         ->name('supervisor.transaksi.index');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | Auth Routes
 |--------------------------------------------------------------------------
 */
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
